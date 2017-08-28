@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.lotteryDb.mapper.UserBalanceMapper">
+
+	<insert id="insertUserBalance" parameterType="com.xinwei.lotteryDb.domain.UserBalance">
+		insert into user_balance(
+			user_id,
+			telphoneNum,
+			balance,
+			expireData,
+			balanceExt,
+			transaction,
+			updateTime,
+			updatesource)
+		values(
+			#{userId},
+			#{telphonenum},
+			#{balance},
+			#{expiredata},
+			#{balanceext},
+			#{transaction},
+			#{updatetime},
+			#{updatesource})
+	</insert>
+
+	<select id="selectUserBalance" parameterType="com.xinwei.lotteryDb.domain.UserBalance"
+		resultType="com.xinwei.lotteryDb.domain.UserBalance">
+		select user_id as userId,
+			telphoneNum,
+			balance,
+			expireData,
+			balanceExt,
+			transaction,
+			updateTime,
+			updatesource
+		from user_balance
+		where user_id=#{userId,jdbcType=BIGINT} 
+	</select>
+
+	<update id="updateUserBalance" parameterType="com.xinwei.lotteryDb.domain.UserBalance">
+		update user_balance
+		set balance=balance - #{amount,jdbcType=DECIMAL},
+		expiredata=#{expiredata,jdbcType=DATE},
+		balanceext=#{balanceext,jdbcType=VARCHAR},
+		transaction=#{transaction,jdbcType=VARCHAR},
+		updateTime=#{updatetime},
+		updatesource=#{updatesource,jdbcType=VARCHAR}		
+		where user_id=#{userId,jdbcType=BIGINT} 
+			  and balanceext = #{oldBalanceext,jdbcType=VARCHAR} 
+			  and balance=#{balance,jdbcType=DECIMAL}
+			  and balance>=#{amount}
+	</update>
+	
+	<delete id="deleteUserBalance" parameterType="com.xinwei.lotteryDb.domain.UserBalance">
+		delete from  user_balance
+		where user_id=#{userId,jdbcType=BIGINT} 
+	</delete>
+	
+</mapper>

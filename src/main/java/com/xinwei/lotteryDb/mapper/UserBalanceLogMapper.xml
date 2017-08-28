@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xinwei.lotteryDb.mapper.UserBalanceLogMapper">
+
+	<insert id="insertUserBalanceLog" parameterType="com.xinwei.lotteryDb.domain.UserBalanceLog">
+		insert into user_balancelog(
+			user_id,
+			updatetime,
+			transaction,
+			transactionTime,
+			updatesource,
+			beginningbalance,
+			beginningexpiretimes,
+			amount,
+			remark
+		)
+		values(
+			#{userId},
+			#{updatetime},
+			#{transaction},
+			#{transactionTime},
+			#{updatesource},
+			#{beginningbalance},
+			#{beginningexpiretimes},
+			#{amount},
+		    #{remark}
+			)
+	</insert>
+
+	<select id="selectUserBalanceLog" parameterType="com.xinwei.lotteryDb.domain.UserBalanceLog"
+		resultType="com.xinwei.lotteryDb.domain.UserBalanceLog">
+		select user_id as userId,
+			updatetime,
+			transaction,
+			transactionTime,
+			updatesource,
+			beginningbalance,
+			beginningexpiretimes,
+			amount,
+			remark
+		from user_balancelog
+		where user_id=#{userId,jdbcType=BIGINT} and  transactionTime=#{transactionTime} and transaction=#{transaction,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateUserBalanceLog" parameterType="com.xinwei.lotteryDb.domain.UserBalance">
+		update user_balancelog
+		set updatetime=#{updatetime},
+		transaction=#{transaction,jdbcType=VARCHAR},
+		transactionTime=#{transactionTime},		
+		updatesource=#{updatesource,jdbcType=VARCHAR},
+		beginningbalance=#{beginningbalance,jdbcType=DECIMAL},
+		beginningexpiretimes=#{beginningexpiretimes},
+		amount=#{amount,jdbcType=DECIMAL},
+		remark=#{remark,jdbcType=VARCHAR}		
+		where user_id=#{userId,jdbcType=BIGINT} and transactionTime=#{transactionTime} and transaction=#{transaction}
+	</update>
+    
+    <delete id="deleteUserBalanceLog" parameterType="com.xinwei.lotteryDb.domain.UserBalance">
+		delete from  user_balancelog
+		where user_id=#{userId,jdbcType=BIGINT} and transactionTime=#{transactionTime} and transaction=#{transaction}
+	</delete>
+</mapper>
