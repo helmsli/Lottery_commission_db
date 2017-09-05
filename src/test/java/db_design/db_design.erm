@@ -23,7 +23,7 @@
 	<category_index>0</category_index>
 	<zoom>1.0</zoom>
 	<x>0</x>
-	<y>91</y>
+	<y>8</y>
 	<default_color>
 		<r>128</r>
 		<g>128</g>
@@ -94,7 +94,7 @@
 				<is_use_logical_name>true</is_use_logical_name>
 			</export_excel_setting>
 			<export_html_setting>
-				<output_dir></output_dir>
+				<output_dir>C:\Users\helmsli\Downloads\ecplise</output_dir>
 				<with_category_image>true</with_category_image>
 				<with_image>true</with_image>
 				<is_open_after_saved>true</is_open_after_saved>
@@ -146,7 +146,7 @@
 			</connections>
 			<display>false</display>
 			<creation_date>2017-08-15 16:15:20</creation_date>
-			<updated_date>2017-08-19 09:38:05</updated_date>
+			<updated_date>2017-09-02 11:21:01</updated_date>
 			<model_property>
 				<name>Project Name</name>
 				<value></value>

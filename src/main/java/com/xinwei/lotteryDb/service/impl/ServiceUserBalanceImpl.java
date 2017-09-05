@@ -144,7 +144,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 		newUserBalanceLog.setTransaction(newUserBalance.getTransaction());
 		newUserBalanceLog.setUpdatetime(newUserBalance.getUpdatetime());
 		newUserBalanceLog.setUpdatesource(newUserBalance.getUpdatesource());
-		newUserBalanceLog.setAmount(newUserBalance.getAmount());
+		newUserBalanceLog.setAmount(userBalanceApply.getAmount());
 		newUserBalanceLog.setBeginningbalance(nowDbUserBalance.getBalance());
 		newUserBalanceLog.setBeginningexpiretimes(nowDbUserBalance.getExpiredata());
 		newUserBalanceLog.setTransactionTime(userBalanceApply.getTransactionTime());
@@ -206,7 +206,6 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 		UserBalanceApplyResult userBalanceApplyResult = new UserBalanceApplyResult();
 		userBalanceApplyResult.setResult(UserBalanceApplyConst.RESULT_FAILURE);
 		userBalanceApplyResult.setError(0);
-		
 		/**
 		 *判断交易是否已经执行过了
 		 */
@@ -369,7 +368,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 			UserBalance userBalance = new UserBalance();
 			userBalance.setUserId(userBalanceApply.getUserId());
 			List<UserBalance> dbUserBalances = userBalanceMapper.selectUserBalance(userBalance);
-			if(dbUserBalances!=null&&dbUserBalances.size()==0)
+			if(dbUserBalances!=null&&dbUserBalances.size()>0)
 			{
 				
 				userBalanceApplyResult.setError(UserBalanceApplyConst.ERROR_TRANSACTION_LAST);

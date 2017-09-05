@@ -10,16 +10,16 @@
 	default-lazy-init="false">
 
 	<!----> 
-	<bean name="hessian/ServiceUserBlance"
+	<bean name="/lot_comm_balancedb/hessian/ServiceUserBlance"
 		class="org.springframework.remoting.caucho.HessianServiceExporter">
-		<property name="serviceInterface" value="com.xinwei.lotteryDb.mapper.UserBalanceMapper" />
-		<property name="service" ref="userBalanceMapperImpl" />
+		<property name="serviceInterface" value="com.xinwei.lotteryDb.service.ServiceUserBlance" />
+		<property name="service" ref="serviceUserBalanceImpl" />
 	</bean>
- 	
+ 	<!-- 
  	<bean name="hessian/ServiceUserBlanceLog"
 		class="org.springframework.remoting.caucho.HessianServiceExporter">
 		<property name="serviceInterface" value="com.xinwei.lotteryDb.mapper.UserBalanceLogMapper" />
 		<property name="service" ref="userBalanceLogMapperImpl" />
 	</bean>
- 	
+ 	 -->
 </beans>

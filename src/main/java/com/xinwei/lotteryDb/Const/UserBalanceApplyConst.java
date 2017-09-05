@@ -5,7 +5,7 @@ public class UserBalanceApplyConst {
 	/**
 	 * 可以查询最后一次的transid
 	 */
-	public static final String queryLastTransaction="**19751124101213****00000";
+	public static final String queryLastTransaction="**01112410121312****00000000";
 	//账户初始化的时候的transaction
 	public static final String initZeroTransaction="00200008221011223333333";
 	
