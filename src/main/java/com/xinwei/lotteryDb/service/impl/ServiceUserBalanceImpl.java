@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.company.security.utils.SecurityUserAlgorithm;
 import com.xinwei.lotteryDb.Const.UserBalanceApplyConst;
 import com.xinwei.lotteryDb.domain.UserBalance;
 import com.xinwei.lotteryDb.domain.UserBalanceApply;
@@ -25,7 +27,71 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	@Autowired
 	private UserBalanceMapper userBalanceMapper;
 
+	/**
+	 * 用户对内的传输加密
+	 */
+	@Value("${transfer.balanceKey}")  
+	private String transferBalKey;
 	
+	@Value("${db.balanceKey}")  
+	private String dbBalKey;
+	
+	/**
+	 * 创建crckey
+	 * @param userBalanceApply
+	 * @return
+	 */
+	protected String createCrcBalanceApply(UserBalanceApply userBalanceApply)
+	{
+		try {
+			String key = this.transferBalKey;
+			StringBuilder source = new StringBuilder();
+			source.append(userBalanceApply.getUserId());
+			source.append(SecurityUserAlgorithm.Prop_split);
+			source.append(userBalanceApply.getTransaction());
+			source.append(SecurityUserAlgorithm.Prop_split);
+			source.append(userBalanceApply.getAmount());			
+			String checkCrc = SecurityUserAlgorithm.EncoderByMd5(key, source.toString());
+			return checkCrc;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return "";
+	}
+	
+	/**
+	 * 
+	 * @param userBalanceApply
+	 * @return
+	 */
+	protected String createDbCrc(UserBalance userBalance)
+	{
+		try {
+			String key = this.dbBalKey;
+			StringBuilder source = new StringBuilder();
+			source.append(userBalance.getUserId());
+			source.append(SecurityUserAlgorithm.Prop_split);
+			source.append(userBalance.getTransaction());
+			source.append(SecurityUserAlgorithm.Prop_split);
+			source.append(userBalance.getAmount());			
+			String checkCrc = SecurityUserAlgorithm.EncoderByMd5(key, source.toString());
+			return checkCrc;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		return "";
+	}
+	
+	protected boolean checkTransferCrc(UserBalanceApply userBalanceApply)
+	{
+		String newCrc = this.createCrcBalanceApply(userBalanceApply);
+		return userBalanceApply.getBalanceext().equalsIgnoreCase(newCrc);
+		
+	}
 	/**
 	 * 如果账户不存在，初始化账户信息
 	 * @param userBalanceApply
@@ -33,6 +99,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	 */
 	public UserBalance initUserBalance(UserBalance nowUserBalance,UserBalanceApply userBalanceApply)
 	{
+		
 		UserBalance userBalance = new UserBalance();
 		//Date nowDate = Calendar.getInstance().getTime();
 		userBalance.setUserId(userBalanceApply.getUserId());
@@ -71,7 +138,15 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	 */
 	protected int checkBalanceCrc(UserBalance dbUseBalance)
 	{
-		return UserBalanceApplyConst.RESULT_SUCCESS;
+		String newCrc = createDbCrc(dbUseBalance);
+		if(newCrc.equalsIgnoreCase(dbUseBalance.getBalanceext()))
+		{
+			return UserBalanceApplyConst.RESULT_SUCCESS;
+		}
+		else
+		{
+			return UserBalanceApplyConst.ERROR_DBCheckCrc_ERROR;
+		}
 	}
 	/**
 	 * 创建CRC校验和
@@ -80,7 +155,8 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	 */
 	public String getBalanceCrc(UserBalance nowUseBalance)
 	{
-		return "defaultcrc";
+		return createDbCrc(nowUseBalance);
+	
 	}
 	/**
 	 * 根据转账请求获取转账日志信息
@@ -206,6 +282,12 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 		UserBalanceApplyResult userBalanceApplyResult = new UserBalanceApplyResult();
 		userBalanceApplyResult.setResult(UserBalanceApplyConst.RESULT_FAILURE);
 		userBalanceApplyResult.setError(0);
+		if(!checkTransferCrc(userBalanceApply))
+		{
+			userBalanceApplyResult.setError(UserBalanceApplyConst.ERROR_CheckCrc_ERROR);
+			return userBalanceApplyResult;
+		}
+		
 		/**
 		 *判断交易是否已经执行过了
 		 */
@@ -360,7 +442,11 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 		UserBalanceApplyResult userBalanceApplyResult = new UserBalanceApplyResult();
 		userBalanceApplyResult.setResult(UserBalanceApplyConst.RESULT_FAILURE);
 		userBalanceApplyResult.setError(0);
-		
+		if(!checkTransferCrc(userBalanceApply))
+		{
+			userBalanceApplyResult.setError(UserBalanceApplyConst.ERROR_CheckCrc_ERROR);
+			return userBalanceApplyResult;
+		}
 		
 		//从当前余额中获取最终的transid
 		if(isQueryLastTransaction(userBalanceApply))

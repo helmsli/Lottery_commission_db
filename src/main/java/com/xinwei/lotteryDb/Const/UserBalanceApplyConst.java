@@ -33,10 +33,15 @@ public class UserBalanceApplyConst {
     /**
      * 系统错误
      */
+    //传输层校验crc错误
+    public static final int ERROR_CheckCrc_ERROR = 1000;
+    
+    
     public static final int ERROR_UPDATEDB_ERROR = 1001;
     public static final int ERROR_INSERT_BALANCE = 1002;
     public static final int ERROR_SELETEDB_ERROR = 1003;
-    
+  //数据库校验crc错误
+    public static final int ERROR_DBCheckCrc_ERROR = 1004;
     
     
     
