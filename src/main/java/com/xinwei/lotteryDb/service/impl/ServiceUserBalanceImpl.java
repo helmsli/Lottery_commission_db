@@ -63,10 +63,11 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	
 	/**
 	 * 
-	 * @param userBalanceApply
+	 * @param userBalance
+	 * @param amount
 	 * @return
 	 */
-	protected String createDbCrc(UserBalance userBalance)
+	protected String createDbCrc(UserBalance userBalance,double amount)
 	{
 		try {
 			String key = this.dbBalKey;
@@ -74,8 +75,10 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 			source.append(userBalance.getUserId());
 			source.append(SecurityUserAlgorithm.Prop_split);
 			source.append(userBalance.getTransaction());
-			source.append(SecurityUserAlgorithm.Prop_split);
-			source.append(userBalance.getAmount());			
+			source.append(SecurityUserAlgorithm.Prop_split);			
+			
+			long lAmount =Math.round(amount*100);			
+			source.append(lAmount);			
 			String checkCrc = SecurityUserAlgorithm.EncoderByMd5(key, source.toString());
 			return checkCrc;
 		} catch (Exception e) {
@@ -108,7 +111,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 		userBalance.setTransaction(nowUserBalance.getTransaction());
 		userBalance.setExpiredata(nowUserBalance.getExpiredata());		
 		
-		String crc = this.getBalanceCrc(userBalance);
+		String crc = this.getBalanceCrc(userBalance,userBalance.getBalance());
         
 		userBalance.setBalanceext(crc);
 		/*
@@ -138,7 +141,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	 */
 	protected int checkBalanceCrc(UserBalance dbUseBalance)
 	{
-		String newCrc = createDbCrc(dbUseBalance);
+		String newCrc = getBalanceCrc(dbUseBalance,dbUseBalance.getBalance());
 		if(newCrc.equalsIgnoreCase(dbUseBalance.getBalanceext()))
 		{
 			return UserBalanceApplyConst.RESULT_SUCCESS;
@@ -153,9 +156,9 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	 * @param nowUseBalance
 	 * @return
 	 */
-	public String getBalanceCrc(UserBalance nowUseBalance)
+	public String getBalanceCrc(UserBalance nowUseBalance,double amount)
 	{
-		return createDbCrc(nowUseBalance);
+		return createDbCrc(nowUseBalance,amount);
 	
 	}
 	/**
@@ -201,7 +204,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	
 		newUserBalance.setOldBalanceext(nowDbUserBalance.getBalanceext());
 		newUserBalance.setBalance(nowDbUserBalance.getBalance());
-		String newCrc=getBalanceCrc(newUserBalance);
+		String newCrc=getBalanceCrc(newUserBalance,(newUserBalance.getBalance() - newUserBalance.getAmount()));
 		newUserBalance.setBalanceext(newCrc);
 		return newUserBalance;
 	}
@@ -217,10 +220,10 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	{
 		UserBalanceLog newUserBalanceLog = new UserBalanceLog();
 		newUserBalanceLog.setUserId(userBalanceApply.getUserId());
-		newUserBalanceLog.setTransaction(newUserBalance.getTransaction());
-		newUserBalanceLog.setUpdatetime(newUserBalance.getUpdatetime());
-		newUserBalanceLog.setUpdatesource(newUserBalance.getUpdatesource());
-		newUserBalanceLog.setAmount(userBalanceApply.getAmount());
+		newUserBalanceLog.setTransaction(nowDbUserBalance.getTransaction());
+		newUserBalanceLog.setUpdatetime(nowDbUserBalance.getUpdatetime());
+		newUserBalanceLog.setUpdatesource(nowDbUserBalance.getUpdatesource());
+		newUserBalanceLog.setAmount(nowDbUserBalance.getAmount());
 		newUserBalanceLog.setBeginningbalance(nowDbUserBalance.getBalance());
 		newUserBalanceLog.setBeginningexpiretimes(nowDbUserBalance.getExpiredata());
 		newUserBalanceLog.setTransactionTime(userBalanceApply.getTransactionTime());
@@ -258,6 +261,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 	@Transactional
 	public int updateBalance(UserBalance userBalance,UserBalanceLog userBalanceLog)
 	{
+		
 		int updateRow = this.userBalanceMapper.updateUserBalance(userBalance);
 		if(updateRow>0)
 		{
@@ -343,6 +347,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 					 //初始余额必须大于等于0；
 					
 						 userBalanceMapper.insertUserBalance(initUserBalance);
+						 this.userBalanceLogMapper.insertUserBalanceLog(userBalanceLog);
 						 createApplyResult(initUserBalance,userBalanceApplyResult);
 						 userBalanceApplyResult.setResult(UserBalanceApplyConst.RESULT_SUCCESS_init);
 						 return userBalanceApplyResult;
@@ -374,6 +379,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 				userBalanceApplyResult.setError(result);
 				return userBalanceApplyResult;
 			}
+			
 			//end of 校验是否库校验和是否合法
 			
 			//比较请求数据和当前是否是否一致

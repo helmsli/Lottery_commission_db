@@ -258,6 +258,11 @@ public class UserBalance implements Serializable{
 		{
 			return UserBalanceApplyConst.ERROR_BALANCE_UID_NOTEQUAL;
 		}
+		if(!this.getTransaction().equalsIgnoreCase(srcUserBalance.getTransaction()))
+		{
+			return UserBalanceApplyConst.ERROR_TRANSACTION_NOTEQUAL; 
+		}
+		
 		if(this.balance!=srcUserBalance.getBalance())
 		{
 			return UserBalanceApplyConst.ERROR_BALANCE_NOTEQUAL;
@@ -270,10 +275,6 @@ public class UserBalance implements Serializable{
 		if(this.getExpiredata().compareTo(srcUserBalance.getExpiredata())!=0)
 		{
 			return UserBalanceApplyConst.ERROR_EXPIRETIME_NOTEQUAL; 
-		}
-		if(!this.getTransaction().equalsIgnoreCase(srcUserBalance.getTransaction()))
-		{
-			return UserBalanceApplyConst.ERROR_TRANSACTION_NOTEQUAL; 
 		}
 		
 		return 0;
