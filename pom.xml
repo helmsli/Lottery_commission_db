@@ -5,7 +5,7 @@
 
 	<groupId>com.xinwei</groupId>
 	<artifactId>Lottery_commission_db</artifactId>
-	<version>0.0.0.1</version>
+	<version>1.0.0.2test</version>
 	<packaging>jar</packaging>
 
 	<name>Lottery_commission_db</name>

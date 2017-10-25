@@ -40,7 +40,7 @@ public class UserBalance implements Serializable{
 	private String transaction;
 
 	/** 最后更新时间. */
-	private Date updatetime;
+	private Date updatetime=Calendar.getInstance().getTime();
 
 	/** 更新来源. */
 	private String updatesource;

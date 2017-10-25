@@ -425,6 +425,7 @@ public class ServiceUserBalanceImpl implements ServiceUserBlance {
 				userBalanceApplyResult.setError(UserBalanceApplyConst.ERROR_UPDATEDB_ERROR);
 				
 			}			
+			
 			return userBalanceApplyResult;
 			
 		}
