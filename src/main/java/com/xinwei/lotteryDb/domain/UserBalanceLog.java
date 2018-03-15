@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 /**
  * Model class of user_balanceLog.
  * 
@@ -223,13 +225,8 @@ public class UserBalanceLog implements Serializable {
 		this.transactionTime = localCalendar.getTime();
 	}
 
-	@Override
 	public String toString() {
-		return "UserBalanceLog [userId=" + userId + ", updatetime=" + updatetime + ", transaction=" + transaction
-				+ ", transactionTime=" + transactionTime + ", updatesource=" + updatesource + ", beginningbalance="
-				+ beginningbalance + ", beginningexpiretimes=" + beginningexpiretimes + ", amount=" + amount
-				+ ", remark=" + remark + "]";
+		return ToStringBuilder.reflectionToString(this);
 	}
- 
 
 }

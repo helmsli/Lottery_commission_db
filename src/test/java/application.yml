@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: credit-writedb
+  datasource:
+    name: lottery_db_name
+    url: jdbc:mysql://127.0.0.1:3306/lotterydb
+    username: cmanager
+    password: cmanager
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      initial-size: 1
+      min-idle: 5
+      max-active: 20
+server:
+  port: 8764
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.80.129:8761/eureka/,http://192.168.80.129:8769/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90

@@ -3,6 +3,8 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.xinwei.lotteryDb.Const.UserBalanceApplyConst;
 
 /**
@@ -280,12 +282,8 @@ public class UserBalance implements Serializable{
 		return 0;
 	}
 
-	@Override
 	public String toString() {
-		return "UserBalance [userId=" + userId + ", telphonenum=" + telphonenum + ", balance=" + balance
-				+ ", expiredata=" + expiredata + ", balanceext=" + balanceext + ", oldBalanceext=" + oldBalanceext
-				+ ", transaction=" + transaction + ", updatetime=" + updatetime + ", updatesource=" + updatesource
-				+ ", amount=" + amount + "]";
+		return ToStringBuilder.reflectionToString(this);
 	}
 	
 

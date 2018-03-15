@@ -3,6 +3,8 @@ package com.xinwei.lotteryDb.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class UserBalanceApply implements Serializable {
 
 	/**
@@ -154,12 +156,8 @@ public class UserBalanceApply implements Serializable {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
-	@Override
 	public String toString() {
-		return "UserBalanceApply [userId=" + userId + ", telphonenum=" + telphonenum + ", transaction=" + transaction
-				+ ", transactionTime=" + transactionTime + ", orderId=" + orderId + ", amount=" + amount + ", remark="
-				+ remark + ", balanceext=" + balanceext + ", bizType=" + bizType + ", operType=" + operType
-				+ ", updatetime=" + updatetime + ", updatesource=" + updatesource + ", expireDays=" + expireDays + "]";
+		return ToStringBuilder.reflectionToString(this);
 	}
 
    

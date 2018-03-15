@@ -1,5 +1,6 @@
 package com.xinwei.lotteryDb.domain;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class UserBalanceApplyResult  extends UserBalance{
 
@@ -51,10 +52,8 @@ public class UserBalanceApplyResult  extends UserBalance{
 
 	
 
-	@Override
 	public String toString() {
-		return "UserBalanceApplyResult [result=" + result + ", error=" + error + ", errorMessage=" + errorMessage
-				+"]" + super.toString();
+		return ToStringBuilder.reflectionToString(this);
 	}
 
 	
