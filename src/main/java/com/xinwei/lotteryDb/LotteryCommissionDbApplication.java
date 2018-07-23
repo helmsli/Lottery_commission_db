@@ -7,24 +7,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @EnableEurekaClient
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan ("com.xinwei.lotteryDb")
-@MapperScan ("com.xinwei.lotteryDb.mapper")
-@ImportResource ({ "classpath:hessian/hessian-client.xml", "classpath:hessian/hessian-server.xml" })
+@ComponentScan("com.xinwei.lotteryDb")
+@MapperScan("com.xinwei.lotteryDb.mapper")
+//@ImportResource ({ "classpath:hessian/hessian-client.xml", "classpath:hessian/hessian-server.xml" })
 public class LotteryCommissionDbApplication {
 
 	public static void main(String[] args) {
 		try {
-		SpringApplication.run(LotteryCommissionDbApplication.class, args);
-		}
-		catch(Throwable e)
-		{
-		   e.printStackTrace();	
+			SpringApplication.run(LotteryCommissionDbApplication.class, args);
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 package com.xinwei.lotteryDb.domain;
+
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,8 +30,6 @@ public class UserBalanceLog implements Serializable {
 	/**事务发生时间*/
 	private Date transactionTime;
 
-	
-	
 	/** 更新来源. */
 	private String updatesource;
 
@@ -78,10 +77,18 @@ public class UserBalanceLog implements Serializable {
 	 *            最后更新时间
 	 */
 	public void setUpdatetime(Date updatetime) {
-		Calendar localCalendar = Calendar.getInstance();
-		localCalendar.setTime(updatetime);
-		localCalendar.set(Calendar.MILLISECOND, 0);			
-		this.updatetime = localCalendar.getTime();
+		if (updatetime == null) {
+			return;
+		}
+		try {
+			Calendar localCalendar = Calendar.getInstance();
+			localCalendar.setTime(updatetime);
+			localCalendar.set(Calendar.MILLISECOND, 0);
+			this.updatetime = localCalendar.getTime();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -206,7 +213,7 @@ public class UserBalanceLog implements Serializable {
 	public String getRemark() {
 		return this.remark;
 	}
-    
+
 	/**
 	 * 
 	 * @return
@@ -214,15 +221,24 @@ public class UserBalanceLog implements Serializable {
 	public Date getTransactionTime() {
 		return transactionTime;
 	}
-     /**
-      * 
-      * @param transactionTime
-      */
+
+	/**
+	 * 
+	 * @param transactionTime
+	 */
 	public void setTransactionTime(Date transactionTime) {
-		Calendar localCalendar = Calendar.getInstance();
-		localCalendar.setTime(transactionTime);
-		localCalendar.set(Calendar.MILLISECOND, 0);		
-		this.transactionTime = localCalendar.getTime();
+		if (transactionTime == null) {
+			return;
+		}
+		try {
+			Calendar localCalendar = Calendar.getInstance();
+			localCalendar.setTime(transactionTime);
+			localCalendar.set(Calendar.MILLISECOND, 0);
+			this.transactionTime = localCalendar.getTime();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String toString() {

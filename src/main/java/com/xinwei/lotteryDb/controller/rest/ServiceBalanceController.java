@@ -16,16 +16,17 @@ import com.xinwei.lotteryDb.domain.UserBalanceApplyResult;
 import com.xinwei.lotteryDb.service.ServiceUserBlance;
 
 @RestController
-@RequestMapping("/userbalance")
+@RequestMapping("/serviceUserBlance")
 public class ServiceBalanceController {
-	@Resource(name="serviceUserBalanceImpl")
+	@Resource(name = "serviceUserBalanceImpl")
 	private ServiceUserBlance serviceUserBlance;
-	
+
 	@PostMapping(value = "/updateBalance")
-	public  UserBalanceApplyResult updateBlance(@RequestBody UpdateBalRequest updateBalRequest) {
-		
+	public UserBalanceApplyResult updateBlance(@RequestBody UpdateBalRequest updateBalRequest) {
+
 		try {
-			UserBalanceApplyResult userBalanceApplyResult= serviceUserBlance.updateUserBalance(updateBalRequest.getNowUseBalance(), updateBalRequest.getUserBalanceApply());
+			UserBalanceApplyResult userBalanceApplyResult = serviceUserBlance
+					.updateUserBalance(updateBalRequest.getNowUseBalance(), updateBalRequest.getUserBalanceApply());
 			return userBalanceApplyResult;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -38,11 +39,12 @@ public class ServiceBalanceController {
 			userBalanceApplyResult.setResult(UserBalanceApplyConst.RESULT_FAILURE);
 			return userBalanceApplyResult;
 		}
-	 }
-	@PostMapping(value = "/queryTransaction")
-	public	UserBalanceApplyResult queryTransaction(@RequestBody UserBalanceApply userBalanceApply)
-	{
-		return serviceUserBlance.queryTransaction(userBalanceApply);
 	}
-	
+
+	@PostMapping(value = "/queryTransaction")
+	public UserBalanceApplyResult queryTransaction(@RequestBody UserBalanceApply userBalanceApply) {
+		UserBalanceApplyResult result = serviceUserBlance.queryTransaction(userBalanceApply);
+		return result;
+	}
+
 }
