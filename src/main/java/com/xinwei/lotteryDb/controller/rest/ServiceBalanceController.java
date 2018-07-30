@@ -46,4 +46,5 @@ public class ServiceBalanceController {
 		UserBalanceApplyResult result = serviceUserBlance.queryTransaction(userBalanceApply);
 		return result;
 	}
+
 }
